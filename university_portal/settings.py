@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-from university_portal.local_settings import *
+from .local_settings import *
 
 from datetime import timedelta
 
