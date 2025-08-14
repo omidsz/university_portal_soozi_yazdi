@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ثبت‌نام در رویداد</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-purple-50 flex items-center justify-center min-h-screen p-4">
+
+  <div class="bg-white shadow-lg rounded-2xl p-6 w-full max-w-md space-y-4">
+    <h1 id="eventTitle" class="text-xl font-bold text-purple-700">در حال بارگذاری...</h1>
+    <p id="eventDescription" class="text-gray-700 text-sm"></p>
+    <p id="eventDate" class="text-gray-500 text-sm"></p>
+    <p id="eventCapacity" class="text-blue-600 text-sm font-bold"></p>
+
+    <button id="registerBtn" onclick="submitRegistration()" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
+      ثبت‌نام در این رویداد
+    </button>
+
+    <div id="result" class="text-sm mt-2"></div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('access_token');
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get('event_id');
+
+    if (!token) {
+      alert("لطفاً ابتدا وارد شوید.");
+      window.location.href = "/api/accounts/login-page/";
+    }
+
+    function fetchEventDetails() {
+      fetch(`/api/portal/events/${eventId}/`, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('eventTitle').textContent = data.title;
+        document.getElementById('eventDescription').textContent = data.description;
+        document.getElementById('eventDate').textContent = `تاریخ: ${data.date}`;
+        document.getElementById('eventCapacity').textContent = `ظرفیت باقی‌مانده: ${data.remaining_capacity} نفر`;
+
+        // اگر ظرفیت تمام شده بود دکمه ثبت‌نام را غیرفعال کن
+        if (data.remaining_capacity <= 0) {
+          const btn = document.getElementById('registerBtn');
+          btn.disabled = true;
+          btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+          btn.classList.add('bg-gray-400', 'cursor-not-allowed');
+          btn.textContent = "ظرفیت تکمیل شده است";
+        }
+      })
+      .catch(() => {
+        document.getElementById('eventTitle').textContent = "خطا در بارگذاری اطلاعات رویداد.";
+      });
+    }
+
+    function submitRegistration() {
+      fetch(`/api/portal/events/${eventId}/register/`, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => {
+        if (res.status === 400) { // اگر کاربر قبلاً ثبت‌نام کرده باشد یا ظرفیت پر باشد
+          res.json().then(data => {
+            document.getElementById('result').innerHTML = `<p class="text-yellow-600">${data.detail}</p>`;
+          });
+          return;
+        }
+        if (res.ok) {
+          document.getElementById('result').innerHTML = `<p class="text-green-600">ثبت‌نام انجام شد. ایمیل تأیید برای شما ارسال شد.</p>`;
+          setTimeout(() => {
+            const baseUrl = window.location.origin;
+            window.location.href = `${baseUrl}/api/portal/dashboard/showuser/`;
+          }, 1500);
+        } else {
+          throw new Error();
+        }
+      })
+      .catch(() => {
+        document.getElementById('result').innerHTML = `<p class="text-red-600">خطا در ثبت‌نام.</p>`;
+      });
+    }
+
+    fetchEventDetails();
+  </script>
+</body>
+</html>

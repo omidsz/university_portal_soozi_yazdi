@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>داشبورد کاربر</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{% static 'portal/js/dashboard.js' %}" defer></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Vazirmatn", sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-weight: 700;
+      }
+      @keyframes scroll-ltr {
+        0% {
+          transform: translateX(-1%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .scrolling-announcement {
+        animation: scroll-ltr 100s linear infinite;
+        white-space: nowrap;
+      }
+
+      .scrolling-wrapper:hover .scrolling-announcement {
+        animation-play-state: paused;
+      }
+
+      .telegram-icon {
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-br from-purple-100 to-indigo-200 min-h-screen flex flex-col items-center justify-start p-8"
+  >
+    <div class="w-full max-w-4xl bg-white shadow-lg rounded-2xl p-6 mt-10">
+      <h1
+        class="text-4xl font-bold text-indigo-700 border-b-4 border-indigo-300 pb-2 text-purple-700 border-purple-700"
+      >
+        داشبورد
+      </h1>
+      <br />
+      <div class="mb-8 overflow-hidden">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-2">اطلاعیه‌ها</h2>
+        <div
+          class="scrolling-wrapper relative h-12 bg-purple-50 rounded shadow overflow-hidden"
+        >
+          <div
+            class="scrolling-announcement absolute whitespace-nowrap flex space-x-8 px-4 rtl:space-x-reverse"
+          >
+            {% for ann in announcements %}
+            <div class="inline-block text-purple-800 font-semibold">
+              {{ ann.title }} - {{ ann.content }}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- رویدادها -->
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">
+          رویدادهای علمی
+        </h2>
+        <div
+          id="eventsGrid"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4"
+        ></div>
+      </div>
+
+      <!-- فرم ارسال ایده -->
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-2">
+          ارسال ایده علمی
+        </h2>
+        <form id="ideaForm" enctype="multipart/form-data" class="space-y-4">
+          <input
+            type="text"
+            id="ideaTitle"
+            placeholder="عنوان ایده"
+            required
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          />
+          <textarea
+            id="ideaContent"
+            placeholder="متن ایده..."
+            required
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          ></textarea>
+          <input
+            type="file"
+            id="ideaFile"
+            accept="application/pdf"
+            class="block w-full text-sm text-gray-700 border rounded p-2 bg-gray-50"
+          />
+          <button
+            type="submit"
+            class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
+          >
+            ارسال ایده
+          </button>
+        </form>
+        <div id="ideaResult" class="mt-2 text-sm"></div>
+      </div>
+
+            <!-- ایده‌های تایید شده -->
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-2">
+          ایده‌های تایید شده
+        </h2>
+        <div id="approvedIdeas" class="space-y-4"></div>
+      </div>
+
+      <!-- خروج -->
+      <button
+        onclick="logout()"
+        class="mt-6 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+      >
+        خروج از حساب
+      </button>
+    </div>
+
+    <!-- لینک به تلگرام -->
+    <a
+      href="https://t.me/omidsoozi"
+      target="_blank"
+      class="fixed bottom-6 left-6 bg-white-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 z-50"
+    >
+      <img src="{% static 'images/telegram_icon.jpg' %}" alt="Telegram" class="telegram-icon" />
+    </a>
+  </body>
+</html>

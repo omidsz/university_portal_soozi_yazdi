@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ثبت نام</title>
+  <style>
+
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: linear-gradient(135deg, #f0f2f5, #d9e4f5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        animation: fadeIn 1s ease-in;
+        transition: background 0.5s, color 0.5s;
+      }
+      body.dark {
+        background: linear-gradient(135deg, #1c1c1c, #333);
+        color: #f0f0f0;
+      }
+      .container {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        width: 320px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      body.dark .container {
+        background-color: #444;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+      }
+      .container:hover {
+        transform: translateY(-5px);
+      }
+      h2 {
+        margin-bottom: 1rem;
+      }
+      .button-center {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      body.dark input {
+        background-color: #555;
+        border-color: #666;
+        color: #f0f0f0;
+      }
+      input:focus {
+        border-color: #4caf50;
+        outline: none;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px 5px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+      }
+      button:hover {
+        background-color: #45a049;
+        transform: scale(1.05);
+      }
+      #message {
+        margin-top: 10px;
+        font-weight: bold;
+        text-align: center;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <h2>ثبت نام</h2>
+    <form id="register-form">
+      <input type="text" id="username" placeholder="نام کاربری" required />
+      <input type="email" id="email" placeholder="ایمیل" required />
+      <input type="password" id="password" placeholder="رمز عبور" required />
+      <button type="submit">ثبت نام</button>
+    </form>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    document.getElementById("register-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const response = await fetch("/api/accounts/register/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, email, password }),
+        });
+
+        const result = await response.json();
+        const msg = document.getElementById("message");
+
+        if (response.ok) {
+          msg.style.color = "green";
+          msg.innerText = result.message || "Verification email sent.";
+        } else {
+          msg.style.color = "red";
+          msg.innerText = JSON.stringify(result);
+        }
+      } catch (error) {
+        document.getElementById("message").innerText = "Error sending request.";
+      }
+    });
+  </script>
+</body>
+</html>

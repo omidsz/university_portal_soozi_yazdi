@@ -1,0 +1,540 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="fa" dir="rtl">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>ورود با JWT</title>-->
+<!--    <script src="https://cdn.tailwindcss.com"></script>-->
+<!--</head>-->
+<!--<body class="bg-gradient-to-tr from-indigo-100 to-purple-200 flex items-center justify-center min-h-screen">-->
+
+<!--    <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">-->
+<!--        <h2 class="text-2xl font-bold text-center mb-6 text-purple-700">ورود به حساب کاربری</h2>-->
+
+<!--        <div class="space-y-4">-->
+<!--            <div>-->
+<!--                <label class="block mb-1 font-medium">نام کاربری</label>-->
+<!--                <input type="text" id="username" placeholder="مثلاً ali123"-->
+<!--                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">-->
+<!--            </div>-->
+
+<!--            <div>-->
+<!--                <label class="block mb-1 font-medium">رمز عبور</label>-->
+<!--                <input type="password" id="password" placeholder="رمز عبور"-->
+<!--                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">-->
+<!--            </div>-->
+
+<!--            <button onclick="login()"-->
+<!--                    class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-200">-->
+<!--                ورود-->
+<!--            </button>-->
+
+<!--            <div id="result" class="text-center text-sm mt-4"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <script>-->
+<!--    function login() {-->
+<!--        const username = document.getElementById('username').value.trim();-->
+<!--        const password = document.getElementById('password').value;-->
+<!--        const resultDiv = document.getElementById('result');-->
+
+<!--        fetch('/api/accounts/token/', {-->
+<!--            method: 'POST',-->
+<!--            headers: {-->
+<!--                'Content-Type': 'application/json'-->
+<!--            },-->
+<!--            body: JSON.stringify({ username, password })-->
+<!--        })-->
+<!--        .then(response => {-->
+<!--            if (!response.ok) {-->
+<!--                throw new Error('ورود ناموفق بود');-->
+<!--            }-->
+<!--            return response.json();-->
+<!--        })-->
+<!--        .then(data => {-->
+<!--            console.log(data);-->
+<!--            localStorage.setItem('access_token', data.access);-->
+<!--            localStorage.setItem('refresh_token', data.refresh);-->
+<!--&lt;!&ndash;            localStorage.setItem('role', data.role);  // ذخیره نقش&ndash;&gt;-->
+
+<!--            resultDiv.innerHTML = `<p class="text-green-600">ورود موفق! در حال انتقال...</p>`;-->
+<!--            setTimeout(() => {-->
+<!--                if (data.role === 'moderator') {-->
+<!--                    window.location.href = "http://127.0.0.1:8000/api/portal/dashboard/showmoderator/";  // آدرس داشبورد مدیر انجمن-->
+<!--                } else if (data.role === 'member') {-->
+<!--                    window.location.href = "http://127.0.0.1:8000/api/portal/dashboard/showmember/";  // آدرس داشبورد عضو انجمن-->
+<!--                } else {-->
+<!--                    window.location.href = "http://127.0.0.1:8000/api/portal/dashboard/showuser/";    // آدرس داشبورد کاربر عادی-->
+<!--                }-->
+<!--            }, 1000);-->
+<!--        })-->
+<!--        .catch(error => {-->
+<!--            resultDiv.innerHTML = `<p class="text-red-600">نام کاربری یا رمز عبور اشتباه است.</p>`;-->
+<!--            console.error('Login error:', error);-->
+<!--        });-->
+<!--    }-->
+<!--</script>-->
+
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="fa" dir="rtl">-->
+<!--  <head>-->
+<!--    <meta charset="UTF-8" />-->
+<!--    <title>ورود با JWT</title>-->
+<!--    <script src="https://cdn.tailwindcss.com"></script>-->
+<!--  </head>-->
+<!--  <style>-->
+<!--    * {-->
+<!--      padding: 0;-->
+<!--      margin: 0;-->
+<!--      box-sizing: border-box;-->
+<!--      font-family: sans-serif; /* استفاده از فونت پیش‌فرض سیستم */-->
+<!--    }-->
+
+<!--    body {-->
+<!--      background: linear-gradient(135deg, #f0f2f5, #d9e4f5);-->
+<!--      display: flex;-->
+<!--      justify-content: center;-->
+<!--      align-items: center;-->
+<!--      height: 100vh;-->
+<!--      margin: 0;-->
+<!--      animation: fadeIn 1s ease-in;-->
+<!--      transition: background 0.5s, color 0.5s;-->
+<!--    }-->
+
+<!--    body.dark {-->
+<!--      background: linear-gradient(135deg, #1c1c1c, #333);-->
+<!--      color: #f0f0f0;-->
+<!--    }-->
+
+<!--    .container {-->
+<!--      background-color: white;-->
+<!--      padding: 2rem;-->
+<!--      border-radius: 15px;-->
+<!--      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);-->
+<!--      width: 320px;-->
+<!--      display: flex;-->
+<!--      flex-direction: column;-->
+<!--      align-items: center;-->
+<!--      transition: transform 0.3s, background-color 0.5s;-->
+<!--    }-->
+
+<!--    body.dark .container {-->
+<!--      background-color: #444;-->
+<!--      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);-->
+<!--    }-->
+
+<!--    .container:hover {-->
+<!--      transform: translateY(-5px);-->
+<!--    }-->
+
+<!--    h1, h2 {-->
+<!--      margin-bottom: 1rem;-->
+<!--    }-->
+
+<!--    .button-group {-->
+<!--      display: flex;-->
+<!--      gap: 1rem;-->
+<!--    }-->
+
+<!--    input {-->
+<!--      width: 100%;-->
+<!--      padding: 10px;-->
+<!--      margin: 10px 0;-->
+<!--      border: 1px solid #ddd;-->
+<!--      border-radius: 5px;-->
+<!--      transition: border-color 0.3s, background-color 0.5s;-->
+<!--    }-->
+
+<!--    body.dark input {-->
+<!--      background-color: #555;-->
+<!--      border-color: #666;-->
+<!--      color: #f0f0f0;-->
+<!--    }-->
+
+<!--    input:focus {-->
+<!--      border-color: #4caf50;-->
+<!--      outline: none;-->
+<!--    }-->
+
+<!--    button, .button {-->
+<!--      text-align: center;-->
+<!--      background-color: #4caf50;-->
+<!--      color: white;-->
+<!--      border: none;-->
+<!--      padding: 10px 20px;-->
+<!--      margin: 10px 5px;-->
+<!--      border-radius: 25px;-->
+<!--      cursor: pointer;-->
+<!--      text-decoration: none;-->
+<!--      transition: background-color 0.3s, transform 0.2s;-->
+<!--    }-->
+
+<!--    button:hover, .button:hover {-->
+<!--      background-color: #45a049;-->
+<!--      transform: scale(1.05);-->
+<!--    }-->
+
+<!--    .button-center {-->
+<!--      display: flex;-->
+<!--      justify-content: center;-->
+<!--      width: 100%;-->
+<!--    }-->
+
+<!--    .toggle-btn {-->
+<!--      margin-top: 15px;-->
+<!--      background-color: #555;-->
+<!--    }-->
+
+<!--    body.dark .toggle-btn {-->
+<!--      background-color: #ddd;-->
+<!--      color: #333;-->
+<!--    }-->
+
+<!--    a {-->
+<!--      color: #4caf50;-->
+<!--      text-decoration: none;-->
+<!--    }-->
+
+<!--    a:hover {-->
+<!--      text-decoration: underline;-->
+<!--    }-->
+
+<!--    .text-green-600 {-->
+<!--      color: #16a34a;-->
+<!--    }-->
+
+<!--    .text-red-600 {-->
+<!--      color: #dc2626;-->
+<!--    }-->
+
+<!--    @keyframes fadeIn {-->
+<!--      from {-->
+<!--        opacity: 0;-->
+<!--      }-->
+<!--      to {-->
+<!--        opacity: 1;-->
+<!--      }-->
+<!--    }-->
+<!--  </style>-->
+<!--  <body>-->
+<!--    <div class="container">-->
+<!--      <h2>ورود</h2>-->
+<!--      <form id="loginForm">-->
+<!--        <input-->
+<!--          type="text"-->
+<!--          id="username"-->
+<!--          name="username"-->
+<!--          placeholder="نام کاربری"-->
+<!--          required-->
+<!--          minlength="3"-->
+<!--        />-->
+<!--        <input-->
+<!--          type="password"-->
+<!--          id="password"-->
+<!--          name="password"-->
+<!--          placeholder="رمز عبور"-->
+<!--          required-->
+<!--          minlength="6"-->
+<!--        />-->
+<!--        <div class="button-center">-->
+<!--          <button onclick="login()" type="submit">ورود</button>-->
+<!--        </div>-->
+<!--      </form>-->
+<!--      <div id="result"></div>-->
+<!--      <p>حساب ندارید؟ <a href="../registerpage">ثبت‌نام</a></p>-->
+<!--    </div>-->
+
+<!--    <script>-->
+<!--      document-->
+<!--        .getElementById("loginForm")-->
+<!--        .addEventListener("submit", function (e) {-->
+<!--          e.preventDefault();-->
+<!--          login();-->
+<!--        });-->
+
+<!--      function login() {-->
+<!--        const username = document.getElementById("username").value.trim();-->
+<!--        const password = document.getElementById("password").value;-->
+<!--        const resultDiv = document.getElementById("result");-->
+
+<!--        fetch("/api/accounts/token/", {-->
+<!--          method: "POST",-->
+<!--          headers: {-->
+<!--            "Content-Type": "application/json",-->
+<!--          },-->
+<!--          body: JSON.stringify({ username, password }),-->
+<!--        })-->
+<!--          .then((response) => {-->
+<!--            if (!response.ok) {-->
+<!--              throw new Error("ورود ناموفق بود");-->
+<!--            }-->
+<!--            return response.json();-->
+<!--          })-->
+<!--          .then((data) => {-->
+<!--            localStorage.setItem("access_token", data.access);-->
+<!--            localStorage.setItem("refresh_token", data.refresh);-->
+
+<!--            resultDiv.innerHTML = `<p class="text-green-600">ورود موفق! در حال انتقال...</p>`;-->
+<!--            setTimeout(() => {-->
+<!--              if (data.role === "moderator") {-->
+<!--                window.location.href = "/api/portal/dashboard/showmoderator/";-->
+<!--              } else if (data.role === "member") {-->
+<!--                window.location.href = "/api/portal/dashboard/showmember/";-->
+<!--              } else {-->
+<!--                window.location.href = "/api/portal/dashboard/showuser/";-->
+<!--              }-->
+<!--            }, 1000);-->
+<!--          })-->
+<!--          .catch((error) => {-->
+<!--            resultDiv.innerHTML = `<p class="text-red-600">نام کاربری یا رمز عبور اشتباه است.</p>`;-->
+<!--            console.error("Login error:", error);-->
+<!--          });-->
+<!--      }-->
+<!--    </script>-->
+<!--  </body>-->
+<!--</html>-->
+
+
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ورود</title>
+  </head>
+  <style>
+    @charset "UTF-8";
+
+    @font-face {
+      font-family: Vazir-Medium;
+      src: url(../fonts/Vazir-Medium.eot) format("eot"),
+        url(../fonts/Vazir-Medium.woff) format("woff"),
+        url(../fonts/Vazir-Medium.woff2) format("woff2");
+      font-weight: 700;
+      font-style: normal;
+    }
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: Vazir-Medium;
+    }
+    body {
+      font-family: sans-serif;
+      background: linear-gradient(135deg, #f0f2f5, #d9e4f5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      animation: fadeIn 1s ease-in;
+      transition: background 0.5s, color 0.5s;
+    }
+
+    body.dark {
+      background: linear-gradient(135deg, #1c1c1c, #333);
+      color: #f0f0f0;
+    }
+
+    .container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.3s, background-color 0.5s;
+    }
+
+    body.dark .container {
+      background-color: #444;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+    }
+
+    h1,
+    h2 {
+      margin-bottom: 1rem;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      transition: border-color 0.3s, background-color 0.5s;
+    }
+
+    body.dark input {
+      background-color: #555;
+      border-color: #666;
+      color: #f0f0f0;
+    }
+
+    input:focus {
+      border-color: #4caf50;
+      outline: none;
+    }
+
+    button,
+    .button {
+      text-align: center;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px 5px;
+      border-radius: 25px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover,
+    .button:hover {
+      background-color: #45a049;
+      transform: scale(1.05);
+    }
+
+    .button-center {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .toggle-btn {
+      margin-top: 15px;
+      background-color: #555;
+    }
+
+    body.dark .toggle-btn {
+      background-color: #ddd;
+      color: #333;
+    }
+
+    a {
+      color: #4caf50;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .text-green-600 {
+      color: #16a34a;
+    }
+
+    .text-red-600 {
+      color: #dc2626;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+  <body>
+    <div class="container">
+      <h2>ورود</h2>
+      <form id="loginForm">
+        <input
+          id="username"
+          type="text"
+          name="username"
+          placeholder="نام کاربری"
+          required
+          minlength="3"
+        />
+        <input
+          id="password"
+          type="password"
+          name="password"
+          placeholder="رمز عبور"
+          required
+          minlength="6"
+        />
+        <div class="button-center">
+          <button type="submit">ورود</button>
+        </div>
+        <div id="result"></div>
+      </form>
+      <p>حساب ندارید؟ <a href="../registerpage">ثبت‌نام</a></p>
+    </div>
+
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          login();
+        });
+
+      function login() {
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        const resultDiv = document.getElementById("result");
+
+        fetch("/api/accounts/token/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("ورود ناموفق بود");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            localStorage.setItem("access_token", data.access);
+            localStorage.setItem("refresh_token", data.refresh);
+            resultDiv.innerHTML =
+              '<p class="text-green-600">ورود موفق! در حال انتقال...</p>';
+            setTimeout(() => {
+              if (data.role === "moderator") {
+                window.location.href =
+                  "http://127.0.0.1:8000/api/portal/dashboard/showmoderator/";
+              } else if (data.role === "member") {
+                window.location.href =
+                  "http://127.0.0.1:8000/api/portal/dashboard/showmember/";
+              } else {
+                window.location.href =
+                  "http://127.0.0.1:8000/api/portal/dashboard/showuser/";
+              }
+            }, 1000);
+          })
+          .catch((error) => {
+            resultDiv.innerHTML =
+              '<p class="text-red-600">نام کاربری یا رمز عبور اشتباه است.</p>';
+            console.error("Login error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="fa" dir="rtl">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>تأیید ایمیل</title>-->
+<!--    <script src="https://cdn.tailwindcss.com"></script>-->
+<!--</head>-->
+<!--<body class="bg-gray-100 flex items-center justify-center h-screen">-->
+<!--    <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">-->
+<!--        <h2 class="text-2xl font-bold text-center mb-6">کد تأیید را وارد کنید</h2>-->
+
+<!--        <form id="verifyForm" class="space-y-4">-->
+<!--            <div>-->
+<!--                <label class="block mb-1 font-medium">کد تأیید</label>-->
+<!--                <input type="text" id="code" required-->
+<!--                       class="w-full px-4 py-2 border rounded-lg">-->
+<!--            </div>-->
+
+<!--            <button type="submit"-->
+<!--                    class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">-->
+<!--                تأیید و ثبت‌نام-->
+<!--            </button>-->
+
+<!--            <div id="result" class="text-sm text-center mt-4"></div>-->
+<!--        </form>-->
+<!--    </div>-->
+
+<!--    <script>-->
+<!--        function getQueryParam(param) {-->
+<!--            const urlParams = new URLSearchParams(window.location.search);-->
+<!--            return urlParams.get(param);-->
+<!--        }-->
+
+<!--        document.getElementById('verifyForm').addEventListener('submit', async function (e) {-->
+<!--            e.preventDefault();-->
+
+<!--            const code = document.getElementById('code').value.trim();-->
+<!--            const email = getQueryParam('email');-->
+
+<!--            const resultDiv = document.getElementById('result');-->
+
+<!--            if (!email || !code) {-->
+<!--                resultDiv.innerHTML = `<p class="text-red-600">ایمیل یا کد نامعتبر است.</p>`;-->
+<!--                return;-->
+<!--            }-->
+
+<!--            try {-->
+<!--                const response = await fetch('/api/accounts/send-code/', {-->
+<!--                    method: 'POST',-->
+<!--                    headers: {-->
+<!--                        'Content-Type': 'application/json',-->
+<!--                    },-->
+<!--                    body: JSON.stringify({ email: email, code: code })-->
+<!--                });-->
+
+<!--                if (response.ok) {-->
+<!--                    const data = await response.json();-->
+
+<!--                    // ذخیره‌ی توکن‌ها در صورت وجود-->
+<!--                    if (data.access && data.refresh) {-->
+<!--                        localStorage.setItem('access_token', data.access);-->
+<!--                        localStorage.setItem('refresh_token', data.refresh);-->
+<!--                    }-->
+
+<!--                    resultDiv.innerHTML = `<p class="text-green-600 font-medium">ثبت‌نام با موفقیت انجام شد!</p>`;-->
+
+<!--                    setTimeout(() => {-->
+<!--                        window.location.href = '/portal/home/';-->
+<!--                    }, 1000);-->
+<!--                } else {-->
+<!--                    const errorData = await response.json();-->
+<!--                    resultDiv.innerHTML = `<p class="text-red-600">خطا: ${errorData.detail || 'کد نامعتبر است.'}</p>`;-->
+<!--                }-->
+
+<!--            } catch (err) {-->
+<!--                resultDiv.innerHTML = `<p class="text-red-600">خطایی در اتصال به سرور رخ داد.</p>`;-->
+<!--                console.error(err);-->
+<!--            }-->
+<!--        });-->
+<!--    </script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify Email and Register</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 30px; background: #f5f5f5; }
+        form { max-width: 400px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input, button { width: 100%; padding: 10px; margin-top: 10px; }
+        .message { margin-top: 20px; font-weight: bold; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+
+<h2 style="text-align: center;">تأیید ایمیل و ثبت‌نام</h2>
+
+<form id="verifyForm">
+    <label for="email">ایمیل:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="code">کد تأیید:</label>
+    <input type="text" id="code" name="code" maxlength="6" required>
+
+    <button type="submit">تأیید و ثبت‌نام</button>
+</form>
+
+<div class="message" id="responseMessage"></div>
+
+<script>
+document.getElementById('verifyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const code = document.getElementById('code').value;
+    const responseMessage = document.getElementById('responseMessage');
+    responseMessage.textContent = '';
+    responseMessage.className = 'message';
+
+    try {
+        const response = await fetch('/api/register/verify/', {  // Adjust the URL to your endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include', // Important to send cookies (e.g. session ID)
+            body: JSON.stringify({ email, code })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            responseMessage.textContent = data.error || JSON.stringify(data);
+            responseMessage.classList.add('error');
+        } else {
+            responseMessage.textContent = `ثبت‌نام موفق! خوش آمدید ${data.username}`;
+            responseMessage.classList.add('success');
+            // Optionally save tokens
+            localStorage.setItem('accessToken', data.access);
+            localStorage.setItem('refreshToken', data.refresh);
+        }
+
+    } catch (error) {
+        responseMessage.textContent = 'خطا در ارتباط با سرور.';
+        responseMessage.classList.add('error');
+    }
+});
+</script>
+
+</body>
+</html>
+

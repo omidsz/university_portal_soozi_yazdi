@@ -1,0 +1,12 @@
+{
+  "disk": [
+    {
+      "name": "databasedisk",
+      "mountTo": ""
+    },
+    {
+      "name": "disk",
+      "mountto": "media"
+    }
+  ]
+}
