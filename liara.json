@@ -1,8 +1,11 @@
 {
+  "django": {
+    "pythonVersion": "3.11.11"
+  },
   "disk": [
     {
       "name": "databasedisk",
-      "mountTo": ""
+      "mountTo": "media"
     },
     {
       "name": "disk",

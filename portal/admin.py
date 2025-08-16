@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Announcement, Event, ScientificIdea, Comment, ChatMessage
+from .models import Announcement, Event, ScientificIdea, Comment
 
 
 @admin.register(Announcement)
@@ -37,10 +37,7 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('content', 'user__username')
 
 
-@admin.register(ChatMessage)
-class ChatAdmin(admin.ModelAdmin):
-    list_display = ('sender', 'receiver', 'content')
-    list_filter = ('created_at',)
+
 
 
 
