@@ -17,6 +17,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: celery-worker
-    command: celery -A core worker --l INFO -P INFO
+    command: celery -A university_portal worker --loglevel=debug --pool=solo
     volumes:
       - .:/app
