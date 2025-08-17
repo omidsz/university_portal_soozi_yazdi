@@ -1,2 +1,4 @@
 media
-local_*.py
+local_*
+staticfiles
+__pycache__/
