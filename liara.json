@@ -4,7 +4,7 @@
   "port": 8000,
   "disks": [
     {
-      "name": "static",
+      "name": "disk",
       "mountTo": "/app/staticfiles"
     }
   ]
