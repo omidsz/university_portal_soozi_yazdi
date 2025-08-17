@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-from .local_settings import *
+# from .local_settings import *
 
 from datetime import timedelta
 
@@ -29,6 +29,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 ALLOWED_HOSTS = ['*']
+
+
+#local_setting
+SECRET_KEY = 'django-insecure-3vfi7wdp!1wbgm0ksykkm3hpa)%m*&@h@5e%fm0#6555$dfc_+'
+DEBUG = True
+
+DB_NAME = 'university_portal'
+DB_PASSWORD = 'university_portal'
+DB_HOST = 'localhost'
+DB_USER = 'university_portal'
+DB_PORT = 5432
+
 
 
 # Application definition
