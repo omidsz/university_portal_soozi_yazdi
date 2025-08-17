@@ -1,15 +1,11 @@
 {
-  "django": {
-    "pythonVersion": "3.11.11"
-  },
-  "disk": [
+  "app": "soozi-yazdi",
+  "image": "python",
+  "port": 8000,
+  "disks": [
     {
-      "name": "databasedisk",
-      "mountTo": "media"
-    },
-    {
-      "name": "disk",
-      "mountto": "media"
+      "name": "static",
+      "mountTo": "/app/staticfiles"
     }
   ]
 }
