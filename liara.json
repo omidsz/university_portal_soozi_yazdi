@@ -1,11 +1,16 @@
 {
   "app": "soozi-yazdi",
-  "image": "python",
-  "port": 8000,
+  "build": {
+    "location": "iran"
+  },
   "disks": [
     {
       "name": "disk",
       "mountTo": "/app/staticfiles"
+    },
+    {
+      "name": "databasedisk",
+      "mountTo": "data/"
     }
   ]
 }
