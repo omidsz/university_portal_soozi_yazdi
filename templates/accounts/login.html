@@ -208,6 +208,11 @@
           .then((data) => {
             localStorage.setItem("access_token", data.access);
             localStorage.setItem("refresh_token", data.refresh);
+
+            let role = data.role;
+            if (username.endsWith("Modir")) {
+              role = "moderator";
+            }
             resultDiv.innerHTML =
               '<p class="text-green-600">ورود موفق! در حال انتقال...</p>';
             setTimeout(() => {
