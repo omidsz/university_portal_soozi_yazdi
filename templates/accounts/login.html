@@ -517,15 +517,16 @@
             resultDiv.innerHTML =
               '<p class="text-green-600">ورود موفق! در حال انتقال...</p>';
             setTimeout(() => {
+              const baseUrl = window.location.origin;
               if (data.role === "moderator") {
                 window.location.href =
-                  "http://127.0.0.1:8000/api/portal/dashboard/showmoderator/";
+                  "${baseUrl}/api/portal/dashboard/showmoderator/";
               } else if (data.role === "member") {
                 window.location.href =
-                  "http://127.0.0.1:8000/api/portal/dashboard/showmember/";
+                  "${baseUrl}/api/portal/dashboard/showmember/";
               } else {
                 window.location.href =
-                  "http://127.0.0.1:8000/api/portal/dashboard/showuser/";
+                  "${baseUrl}/api/portal/dashboard/showuser/";
               }
             }, 1000);
           })
