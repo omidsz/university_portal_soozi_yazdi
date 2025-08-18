@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-# from .local_settings import *
-
+from decouple import config
+from .local_settings import *
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,25 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
-
+SECRET_KEY = SECRET_KEY
+DEBUG = DEBUG
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
 ALLOWED_HOSTS = ['*']
-
-
-#local_setting
-SECRET_KEY = 'django-insecure-3vfi7wdp!1wbgm0ksykkm3hpa)%m*&@h@5e%fm0#6555$dfc_+'
-DEBUG = True
-
-DB_NAME = 'university_portal'
-DB_PASSWORD = 'university_portal'
-DB_HOST = 'localhost'
-DB_USER = 'university_portal'
-DB_PORT = 5432
-
-
 
 # Application definition
 
@@ -175,32 +162,27 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CELERY_BROKER_URL = 'redis://localhost:6379/0'
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-# CELERY_ACCEPT_CONTENT = ['json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_TIMEZONE = 'Asia/Tehran'
-CELERY_BROKER_URL = 'redis://:DnWn4VgLYVOUnrjGVtW6Ui7s@redis:6379/0'
-CELERY_RESULT_BACKEND = 'redis://:DnWn4VgLYVOUnrjGVtW6Ui7s@redis:6379/0'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Tehran'
+CELERY_BROKER_URL = config("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND")
+CELERY_ACCEPT_CONTENT = config("CELERY_ACCEPT_CONTENT")
+CELERY_TASK_SERIALIZER = config("CELERY_TASK_SERIALIZER")
+CELERY_RESULT_SERIALIZER = config("CELERY_RESULT_SERIALIZER")
+CELERY_TIMEZONE = config("CELERY_TIMEZONE")
+
+EMAIL_BACKEND = config("EMAIL_BACKEND")
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_PORT = config("EMAIL_PORT")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'omidsoozice@gmail.com'
-EMAIL_HOST_PASSWORD = 'ftrb mumc jbto xdhe'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+REDIS_HOST = config("REDIS_HOST")
+REDIS_PORT = config("REDIS_PORT")
+REDIS_PASSWORD = config("REDIS_PASSWORD")
 
 
-REDIS_HOST = "redis"
-REDIS_PORT = 6379
-REDIS_PASSWORD = "DnWn4VgLYVOUnrjGVtW6Ui7s"
 
 
 
