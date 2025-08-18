@@ -1,5 +1,4 @@
 media
-university_portal/local_settings.py
 staticfiles
 __pycache__/
 .env
