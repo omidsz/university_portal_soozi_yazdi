@@ -12,19 +12,17 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from decouple import config
-from .local_settings import *
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = SECRET_KEY
-DEBUG = DEBUG
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', cast=bool)
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
@@ -76,8 +74,6 @@ MIDDLEWARE = [
 ]
 
 
-
-
 ROOT_URLCONF = 'university_portal.urls'
 
 TEMPLATES = [
@@ -104,11 +100,11 @@ WSGI_APPLICATION = 'university_portal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DB_NAME,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'USER': DB_USER,
-        "PORT": DB_PORT,
+        'NAME': config("DB_NAME"),
+        'PASSWORD': config("DB_PASSWORD"),
+        'HOST': config("DB_HOST"),
+        'USER': config("DB_USER"),
+        "PORT": config("DB_PORT"),
     }
 }
 
