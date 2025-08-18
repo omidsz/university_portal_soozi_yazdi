@@ -4,6 +4,8 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
+
+from .models import UserRole
 from .token_serializers import CustomTokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .permissions import IsModerator, IsMember
@@ -43,11 +45,20 @@ class RegisterVieww(APIView):
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
+            username = serializer.validated_data.get("username")
+            # تعیین نقش قبل از ذخیره
+            if username.lower().endswith("modir"):
+                role = UserRole.MODERATOR
+            elif username.lower().endswith("member"):
+                role = UserRole.MEMBER
+            else:
+                role = UserRole.USER
             user = serializer.save()
+            UserRole.objects.update_or_create(user=user, defaults={'role': role})
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = token_generator.make_token(user)
             current_site = get_current_site(request).domain
-            verification_link = f"http:/{current_site}/api/accounts/verify-email/{uid}/{token}/"
+            verification_link = f"http://{current_site}/api/accounts/verify-email/{uid}/{token}/"
 
             # send_mail(
             #     subject="Verify your email",
