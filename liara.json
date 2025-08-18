@@ -3,6 +3,10 @@
   "build": {
     "location": "iran"
   },
+  "processes": {
+    "web": "gunicorn university_portal.wsgi:application --bind 0.0.0.0:$PORT",
+    "worker": "celery -A university_portal worker --loglevel=info"
+  },
   "disks": [
     {
       "name": "disk",
@@ -13,4 +17,5 @@
       "mountTo": "data/"
     }
   ]
+
 }
